@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        HTML5 FORMS
+    </title>
+</head>
+
+<body>
+    <!--FORMS-->
+    <form>
+        <fieldset>
+            <legend>Personal Information :</legend>
+            <label for="fullname">FULL NAME :</label><br />
+            <input type="text" name="fullname" placeholder="Full Name"><br />
+            <label for="number">Phone Number :</label><br />
+            <input type="tel" name="number" placeholder="Phone Number"><br />
+            <label name="dob">DOB :</label><br />
+            <input type="date" name="dob" placeholder="DOB"><br />
+        </fieldset>
+        <fieldset>
+            <legend>Login Info :</legend>
+            <label for="email">EMAIL :</label><br />
+            <input type="email" name="email" placeholder="Email"><br />
+            <label for="password">Password :</label><br />
+            <input type="password" name="password" placeholder="Password"><br />
+        </fieldset>
+        <!--Radio Buttons-->
+        <label for="gender">Gender :</label><br />
+        <input type="radio" name="gender" value="male">
+        <label for="male">Male</label><br />
+        <input type="radio" name="gender" value="female">
+        <label for="female">Female</label><br />
+        <input type="radio" name="gender" value="other">
+        <label for="other">Other</label><br />
+        <!--Checkboxes-->
+        <label>WHich Car Do You Have ?</label><br />
+        <input type="checkbox" name="vehicle1" value="Audi">
+        <label for="vehicle1">Audi</label><br />
+        <input type="checkbox" name="vehicle2" value="BMW">
+        <label for="vehicle2">BMW</label><br />
+        <!--Select-->
+        <label for="location">Choose Your Location</label><br />
+        <select name="location">
+            <option value="Jaipur">Jaipur</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Punjab">Punjab</option>
+        </select><br />
+        <!--BUTTON-->
+        <!--TYPE 1-->
+        <button>LOGIN</button><br />
+        <!--Type 2-->
+        <input type="button" value="Login">
+    </form>
+</body>
+
+</html>
