@@ -1,0 +1,14 @@
+.one{
+    border: 1px solid black;
+    border-radius: 20px;
+    background-color: red;
+    color: white;
+}
+.one>p{
+    font-size: 25px;
+    color: yellow;
+}
+.one>a{
+    text-decoration: none;
+    color: black;
+}
