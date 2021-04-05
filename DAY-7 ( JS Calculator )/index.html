@@ -1,0 +1,27 @@
+<!Doctype html>
+<html>
+    <head>
+        <title>
+            JS Calculator
+        </title>
+    </head>
+    <body>
+        <form>
+            <input type="text" id="num1" placeholder="Number 1">
+            <input type="text" id="num2" placeholder="Number 2">
+            <button id="risabh">Submit</button>
+        </form>
+    </body>
+    <script>
+        var num1=document.getElementById("num1");
+        var num2=document.getElementById("num2");
+        var risabh=document.getElementById("risabh");
+
+        //risabh naam k button se kaam krana h
+        risabh.addEventListener("click",function(e){
+            e.preventDefault();
+            console.log(num1.value,num2.value);
+        })
+
+    </script>
+</html>
