@@ -8,20 +8,64 @@
     <body>
         <form>
             <input type="text" id="num1" placeholder="Number 1">
-            <input type="text" id="num2" placeholder="Number 2">
-            <button id="risabh">Submit</button>
+            <input type="text" id="num2" placeholder="Number 2"><br />
+            <button id="add">Add</button>
+            <button id="sub">Sub</button>
+            <button id="mul">Mul</button>
+            <button id="div">Div</button>
+            <div id="result">
+
+            </div>
         </form>
     </body>
     <script>
         var num1=document.getElementById("num1");
         var num2=document.getElementById("num2");
-        var risabh=document.getElementById("risabh");
+        var add=document.getElementById("add");
+        var sub=document.getElementById("sub");
+        var mul=document.getElementById("mul");
+        var div=document.getElementById("div");
+        var result=document.getElementById("result");
 
-        //risabh naam k button se kaam krana h
-        risabh.addEventListener("click",function(e){
+        //add
+        add.addEventListener("click",function(e){
             e.preventDefault();
-            console.log(num1.value,num2.value);
+            var x=parseInt(num1.value);
+            var y=parseInt(num2.value);
+            var z=x+y;
+            result.innerHTML=z;  
+            num1.value="";
+            num2.value="";  
         })
-
+        //sub
+        sub.addEventListener("click",function(e){
+            e.preventDefault();
+            var x=parseInt(num1.value);
+            var y=parseInt(num2.value);
+            var z=x-y;
+            result.innerHTML=z;  
+            num1.value="";
+            num2.value="";   
+        })
+        //mul
+        mul.addEventListener("click",function(e){
+            e.preventDefault();
+            var x=parseInt(num1.value);
+            var y=parseInt(num2.value);
+            var z=x*y;
+            result.innerHTML=z; 
+            num1.value="";
+            num2.value="";    
+        })
+        //div
+        div.addEventListener("click",function(e){
+            e.preventDefault();
+            var x=parseInt(num1.value);
+            var y=parseInt(num2.value);
+            var z=x/y;
+            result.innerHTML=z;
+            num1.value="";
+            num2.value="";     
+        })
     </script>
 </html>
