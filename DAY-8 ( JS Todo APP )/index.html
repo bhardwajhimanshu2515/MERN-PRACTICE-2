@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Todo App
+        </title>
+        <style>
+            body{
+                margin: 0;
+                padding: 0;
+            }
+            #header{
+                width: 100%;
+                height:100px;
+                background-color: black;
+                color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #logo{
+                font-size: 25px;
+                font-weight: 900;
+            }
+            #forms{
+                width: 50%;
+                margin: 25px 25%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #todoList{
+                width: 50%;
+                margin: 20px 25%;
+                background-color: black;
+                color: white;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .singleTodo{
+                width: 80%;
+                height: 100px;
+                margin: 20px 10%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                Todo Application
+            </div>
+        </div>
+        <div id="forms">
+            <input type="text" placeholder="Task Name" id="taskName">
+            <button id="addTaskBtn">Add Task</button>
+        </div>
+        <div id="todoList">
+            
+        </div>
+    </body>
+    <script>
+        var taskName=document.getElementById("taskName");
+        var addTaskBtn=document.getElementById("addTaskBtn");
+        var todoList=document.getElementById("todoList");
+        //create an empty array
+        var todo=[];
+
+        //add event
+        addTaskBtn.addEventListener("click",function(e){
+            e.preventDefault();
+            todo.push(taskName.value);
+            console.log("todo array=",todo);
+            taskName.value="";
+            renderList();
+        })
+
+        function renderList(){
+            let res="";
+            for(let i=0;i<todo.length;i++){
+                var single=todo[i];
+                var html=`  <div class="singleTodo">
+                                <div class="todoTitle">
+                                    ${single}
+                                </div>
+                                <div class="buttons">
+                                    <button>Edit</button>
+                                    <button>Delete</button>
+                                </div>
+                            </div>`;
+                res+=html;
+            }
+            console.log("res=",res);
+            todoList.innerHTML=res;
+        }
+    </script>
+</html>
