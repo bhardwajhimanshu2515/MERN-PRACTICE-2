@@ -80,6 +80,22 @@
             renderList();
         })
 
+        //function for delete
+        function deleteIt(index){
+            var newArray=[];
+            for(let i=0;i<todo.length;i++){
+                if(i!==index){
+                    newArray.push(todo[i]);
+                }
+            }
+            todo=newArray;
+            renderList();
+        }
+        //function for edit
+        function editIt(index){
+            taskName.value=todo[index];
+            deleteIt(index);
+        }
         function renderList(){
             let res="";
             for(let i=0;i<todo.length;i++){
@@ -89,8 +105,8 @@
                                     ${single}
                                 </div>
                                 <div class="buttons">
-                                    <button>Edit</button>
-                                    <button>Delete</button>
+                                    <button onClick={editIt(${i})}>Edit</button>
+                                    <button onClick={deleteIt(${i})}>Delete</button>
                                 </div>
                             </div>`;
                 res+=html;
