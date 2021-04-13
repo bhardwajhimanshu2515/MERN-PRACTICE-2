@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Covid 19 app
+        </title>
+    </head>
+    <style>
+        body{
+            margin: 0;
+        }
+        #header{
+            width: 100%;
+            height: 100px;
+            background-color: black;
+            color: white;
+            font-size: 25px;
+            font-weight: 900;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #forms{
+            width: 50%;
+            margin: 20px 25%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #result{
+            width: 50%;
+            margin: 20px 25%;
+            display: flex;
+            justify-content:space-between;
+            align-items: center;
+        }
+        #cases,#deaths{
+            width: 30%;
+            height:100px;
+            background-color: black;
+            color: white;
+        }
+    </style>
+    <body>
+        <div id="header">
+            <div id="logo">
+                Covid 19 App
+            </div>
+        </div>
+        <div id="forms">
+            <input type="text" placeholder="Country Name" id="countryName">
+            <button id="searchCovid">Search Covid Details</button>
+        </div>
+        <div id="result">
+            
+        </div>
+    </body>
+    <script>
+        var countryName=document.getElementById("countryName");
+        var searchCovid=document.getElementById("searchCovid");
+        var covidResult=[];
+        var result=document.getElementById("result");
+        //add event on search Covid
+        searchCovid.addEventListener("click",function(e){
+            e.preventDefault();
+
+            var url=`https://coronavirus-19-api.herokuapp.com/countries/${countryName.value}`;
+            //fetch -> use to hit api or send req to api
+            fetch(url)
+            .then((response)=>{
+                return response.json();
+            })
+            .then((data)=>{
+                console.log(data)
+                covidResult=[data];
+                renderList();
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+        })
+        function renderList(){
+            var res="";
+            for(let i=0;i<covidResult.length;i++){
+                var single=covidResult[i];
+                var html=`  <div id="cases">
+                                Active Cases:${single.active}
+                            </div>
+                            <div id="deaths">
+                                Deaths:${single.deaths}
+                            </div>`;
+                res+=html;
+            }
+            result.innerHTML=res;
+        }
+    </script>
+</html>
