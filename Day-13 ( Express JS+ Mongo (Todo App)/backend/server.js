@@ -91,6 +91,36 @@ mongodb.MongoClient.connect(
         }
       })
 
+    });
+
+    //api for create todo
+    app.post("/createTodo",(req,res)=>{
+      console.log(req.body);
+      const {title,description,deadline,userId}=req.body;
+
+      let createdTodo=newDb.collection('todo').insertOne({title:title,description:description,deadline:deadline,userId:userId})
+      createdTodo.then((Todo)=>{
+        console.log(Todo);
+        return res.status(200).json(Todo.ops[0]);
+      })
+      .catch(err=>{
+        return res.status(500).json("Error in saving Todo");
+      })
+    });
+
+    //get todo
+    app.get("/getTodo/:userId",(req,res)=>{
+      console.log(req.params.userId);
+
+      //get all todo for user which loggedIn
+      let allTodo=newDb.collection('todo').find({userId:req.params.userId}).toArray();
+      allTodo.then((Todo)=>{
+        console.log(Todo);
+        return res.status(200).json(Todo);
+      })
+      .catch(err=>{
+        return res.status(500).json("Error in getting todo");
+      })
     })
   }
 );

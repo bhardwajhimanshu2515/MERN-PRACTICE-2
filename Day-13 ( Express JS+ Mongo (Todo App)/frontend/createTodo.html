@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>
-            Login
+            Create Todo
         </title>
         <style>
             body{
@@ -32,7 +32,7 @@
                 text-decoration: none;
                 color:  white;
             }
-           #forms{
+            #forms{
                width: 50%;
                height:300px;
                margin: 20px 25%;
@@ -49,38 +49,46 @@
                 Todo Application
             </div>
             <div id="links">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="login.html">Login</a>
-                <a href="signup.html">Signup</a>
+                <a href="createTodo.html">Create Todo</a>
+                <a href="getTodo.html">Get Todo</a>
+                <button>Logout</button>
             </div>
         </div>
         <div id="forms">
             <form>
-                <input type="email" placeholder="Email" id="email"><br />
-                <input type="password" placeholder="Password" id="password"><br />
-                <button id="loginBtn">Login</button><br />
-                or<br />
-                <a href="signup.html">Signup</a>
+                <input type="text" placeholder="Todo Title" id="title"><br />
+                <input type="text" placeholder="Todo Description" id="description"><br />
+                <input type="date" placeholder="Todo Deadline" id="deadline"><br />
+                <button id="createTodoBtn">Create Todo</button>
             </form>
         </div>
     </body>
     <script>
-        var email=document.getElementById("email");
-        var password=document.getElementById("password");
-        var loginBtn=document.getElementById("loginBtn");
+        var title=document.getElementById("title");
+        var description=document.getElementById("description");
+        var deadline=document.getElementById("deadline");
+        var createTodoBtn=document.getElementById("createTodoBtn");
 
-        //loginbtn add event
-        loginBtn.addEventListener("click",function(e){
+        //add event
+        createTodoBtn.addEventListener("click",function(e){
             e.preventDefault();
-            let payload={
-                email:email.value,
-                password:password.value
-            }
 
+            //extract userInfo from localstorage
+            let userInfo=JSON.parse(localStorage.getItem("userInfo"));
+
+            //extract _id from userInfo
+            let userId=userInfo[0]._id;
+            
+            let payload={
+                title:title.value,
+                description:description.value,
+                deadline:deadline.value,
+                userId:userId
+            }
             console.log("payload=",payload);
 
-            let url="http://localhost:8081/login";
+            //api url
+            let url="http://localhost:8081/createTodo";
 
             //fetch
             fetch(url,{
@@ -90,29 +98,19 @@
                 },
                 body:JSON.stringify(payload)
             })
-            .then(response=>{
-                console.log(response);
-                if(response.status===200){
-                    return response.json()
-                }
-                else if(response.status===201){
-                    return response.json()
-                }
+            .then(res=>{
+                return res.json()
             })
             .then(data=>{
                 console.log(data)
-                if(typeof(data)==="string"){
-                    window.alert(data);
-                }
-                else if(typeof(data)==="object"){
-                    console.log(data);
-                    localStorage.setItem("userInfo",JSON.stringify(data));
-                    window.location.href="createTodo.html";
-                }
             })
             .catch(err=>{
                 console.log(err);
             })
+
+            title.value="";
+            description.value="";
+            deadline.value="";
         })
     </script>
 </html>

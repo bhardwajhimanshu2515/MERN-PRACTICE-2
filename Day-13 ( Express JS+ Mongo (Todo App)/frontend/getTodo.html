@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Get Todo
+    </title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #header {
+            width: 100%;
+            height: 100px;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #logo {
+            font-size: 25px;
+            font-weight: 900;
+        }
+
+        #links {
+            width: 250px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #links>a {
+            text-decoration: none;
+            color: white;
+        }
+
+        #todolist {
+            width: 50%;
+            margin: 20px 25%;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .singleTodo {
+            width: 80%;
+            margin: 20px 10%;
+            background-color: red;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 100px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header">
+        <div id="logo">
+            Todo Application
+        </div>
+        <div id="links">
+            <a href="createTodo.html">Create Todo</a>
+            <a href="getTodo.html">Get Todo</a>
+            <button>Logout</button>
+        </div>
+    </div>
+    <div id="todolist">
+    </div>
+</body>
+<script>
+    var todolist=document.getElementById("todolist");
+
+    //extract userInfo from localstorage
+    let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+    //extract _id from userInfo
+    let userId = userInfo[0]._id;
+
+    //api url
+    let url="http://localhost:8081/getTodo/"+userId;
+
+    //fetch
+    fetch(url,{
+        method:"GET"
+    })
+    .then(res=>{
+        return res.json();
+    })
+    .then(data=>{
+        console.log(data);
+        renderList(data)
+    })
+    .catch(err=>{
+        console.log(err);
+    })
+
+    function renderList(data){
+        let res="";
+        for(let i=0;i<data.length;i++){
+            let single=data[i];
+            var html=`  <div class="singleTodo">
+                            <div class="info">
+                                <div class="title">${single.title}</div>
+                                <div class="description">${single.description}</div>
+                                <div class="deadline">${single.deadline}</div>
+                            </div>
+                            <div class="btns">
+                                <button>Edit</button>
+                                <button>Delete</button>
+                            </div>
+                        </div>`;
+            res+=html;
+        }
+        todolist.innerHTML=res;
+    }
+</script>
+
+</html>
