@@ -49,16 +49,14 @@ mongodb.MongoClient.connect(
         if (User.length > 0) {
           return res.status(201).json("User Already Exist");
         }
-        //if user does not exist 
+        //if user does not exist
         else if (User.length < 1) {
-          let createUser = newDb
-            .collection("user")
-            .insertOne({
-              name: name,
-              phoneNumber: phoneNumber,
-              email: email,
-              password: password,
-            });
+          let createUser = newDb.collection("user").insertOne({
+            name: name,
+            phoneNumber: phoneNumber,
+            email: email,
+            password: password,
+          });
           createUser.then((User) => {
             res.status(200).json(User.ops);
           });
@@ -67,61 +65,102 @@ mongodb.MongoClient.connect(
     });
 
     //login api
-    app.post("/login",(req,res)=>{
+    app.post("/login", (req, res) => {
       console.log(req.body);
-      const {email,password}=req.body;
+      const { email, password } = req.body;
 
       //check user exist or not
-      let existingUser=newDb.collection('user').find({email:email}).toArray();
-      existingUser.then((User)=>{
+      let existingUser = newDb
+        .collection("user")
+        .find({ email: email })
+        .toArray();
+      existingUser.then((User) => {
         //if user not exist
-        if(User.length<1){
-          return res.status(201).json("User does not exist, please signup Instead ")
+        if (User.length < 1) {
+          return res
+            .status(201)
+            .json("User does not exist, please signup Instead ");
         }
         //if user exist
-        else if(User.length>0){
+        else if (User.length > 0) {
           //if pass match
-          if(password===User[0].password){
-            return res.status(200).json(User)
+          if (password === User[0].password) {
+            return res.status(200).json(User);
           }
           //if pass not match
-          else{
+          else {
             res.status(201).json("Password Didn't match");
           }
         }
-      })
-
+      });
     });
 
     //api for create todo
-    app.post("/createTodo",(req,res)=>{
+    app.post("/createTodo", (req, res) => {
       console.log(req.body);
-      const {title,description,deadline,userId}=req.body;
+      const { title, description, deadline, userId } = req.body;
 
-      let createdTodo=newDb.collection('todo').insertOne({title:title,description:description,deadline:deadline,userId:userId})
-      createdTodo.then((Todo)=>{
-        console.log(Todo);
-        return res.status(200).json(Todo.ops[0]);
-      })
-      .catch(err=>{
-        return res.status(500).json("Error in saving Todo");
-      })
+      let createdTodo = newDb
+        .collection("todo")
+        .insertOne({
+          title: title,
+          description: description,
+          deadline: deadline,
+          userId: userId,
+        });
+      createdTodo
+        .then((Todo) => {
+          console.log(Todo);
+          return res.status(200).json(Todo.ops[0]);
+        })
+        .catch((err) => {
+          return res.status(500).json("Error in saving Todo");
+        });
     });
 
     //get todo
-    app.get("/getTodo/:userId",(req,res)=>{
+    app.get("/getTodo/:userId", (req, res) => {
       console.log(req.params.userId);
 
       //get all todo for user which loggedIn
-      let allTodo=newDb.collection('todo').find({userId:req.params.userId}).toArray();
-      allTodo.then((Todo)=>{
+      let allTodo = newDb
+        .collection("todo")
+        .find({ userId: req.params.userId })
+        .toArray();
+      allTodo
+        .then((Todo) => {
+          console.log(Todo);
+          return res.status(200).json(Todo);
+        })
+        .catch((err) => {
+          return res.status(500).json("Error in getting todo");
+        });
+    });
+
+    //delete todo
+    app.delete("/deleteTodo/:userId/:todoId", (req, res) => {
+      console.log(req.params.todoId);
+
+      let deleteTodo = newDb
+        .collection("todo")
+        .deleteOne({ _id: new mongodb.ObjectId(req.params.todoId) });
+      deleteTodo.then((Todo) => {
         console.log(Todo);
-        return res.status(200).json(Todo);
-      })
-      .catch(err=>{
-        return res.status(500).json("Error in getting todo");
-      })
-    })
+        //get all todo for user which loggedIn
+        let allTodo = newDb
+          .collection("todo")
+          .find({ userId:req.params.userId })
+          .toArray();
+        allTodo
+          .then((Todo) => {
+            console.log(Todo);
+            return res.status(200).json(Todo);
+          })
+          .catch((err) => {
+            return res.status(500).json("Error in getting todo");
+          });
+      });
+    });
   }
 );
 //run server
