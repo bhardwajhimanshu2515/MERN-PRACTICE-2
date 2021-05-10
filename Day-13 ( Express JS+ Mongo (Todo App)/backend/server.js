@@ -161,6 +161,34 @@ mongodb.MongoClient.connect(
           });
       });
     });
+
+    //api for updation of todo
+    app.patch("/updateTodo",(req,res)=>{
+      console.log(req.body);
+      let updateTodo=newDb.collection('todo').findOneAndUpdate({_id: new mongodb.ObjectID(req.body.todoId)},
+      {
+        $set:{
+          title:req.body.title,
+          description:req.body.description,
+          deadline:req.body.deadline
+        }
+      },{new: true,runValidators:true,returnOriginal:false})
+      updateTodo.then(Todo=>{
+        console.log(Todo);
+        let allTodo = newDb
+          .collection("todo")
+          .find({ userId:req.body.userId })
+          .toArray();
+        allTodo
+          .then((Todo) => {
+            console.log(Todo);
+            return res.status(200).json(Todo);
+          })
+          .catch((err) => {
+            return res.status(500).json("Error in getting todo");
+          });
+      })
+    })
   }
 );
 //run server

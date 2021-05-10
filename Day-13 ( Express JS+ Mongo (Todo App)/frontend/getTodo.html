@@ -59,6 +59,13 @@
             min-height: 100px;
             border-radius: 10px;
         }
+        #forms{
+               width: 50%;
+               margin: 20px 25%;
+               display: flex;
+               justify-content: center;
+               align-items: center;
+           }
     </style>
 </head>
 
@@ -70,15 +77,29 @@
         <div id="links">
             <a href="createTodo.html">Create Todo</a>
             <a href="getTodo.html">Get Todo</a>
-            <button>Logout</button>
+            <button id="logoutBTN">Logout</button>
         </div>
+    </div>
+    <div id="forms">
+        
     </div>
     <div id="todolist">
     </div>
 </body>
 <script>
+    if(!localStorage.getItem("userInfo")){
+        window.location.href="login.html";
+    }
     var todolist=document.getElementById("todolist");
+    var forms=document.getElementById("forms");
+    var logoutBTN=document.getElementById("logoutBTN");
 
+        //logoutBTN
+        logoutBTN.addEventListener("click",function(e){
+            e.preventDefault();
+            localStorage.removeItem('userInfo');
+            window.location.href="login.html";
+        })
     //extract userInfo from localstorage
     let userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
@@ -123,18 +144,73 @@
             console.log(err);
         })
     }
+
+    //editIt function here
+     function editIt(e,todoId){
+        e.preventDefault();
+        var title=document.getElementById("title");
+        var description=document.getElementById("description");
+        var deadline=document.getElementById("deadline");
+        let payload={
+            title:title.value,
+            description:description.value,
+            deadline:deadline.value,
+            todoId:todoId,
+            userId:userId
+        }
+        console.log(payload);
+
+        let url="http://localhost:8081/updateTodo";
+
+        //fetch
+        fetch(url,{
+            method:"PATCH",
+            headers:{
+                'Content-Type':"application/json"
+            },
+            body:JSON.stringify(payload)
+        })
+        .then(res=>{
+            return res.json();
+        })
+        .then(data=>{
+            console.log(data);
+            renderList(data);
+            forms.innerHTML="";
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    } 
+    //editInputBox function here
+    function editInputBox(userId,todoId,titleArray,descriptionArray,deadline){
+        let title=titleArray.join(" ");
+        console.log(title)
+        let description=descriptionArray.join(" ");
+        console.log(description)
+
+        console.log("function called");
+        var html=`  <form>
+                        <input type="text" placeholder="Todo Title" id="title" value="${title}"><br />
+                        <input type="text" placeholder="Todo Description" id="description" value="${description}"><br />
+                        <input type="date" placeholder="Todo Deadline" id="deadline" value=${deadline}><br />
+                        <button id="EditTodoBtn" onClick=editIt(event,${JSON.stringify(todoId)})>Edit Todo</button>
+                    </form>`;
+
+        forms.innerHTML=html;
+    }
     function renderList(data){
         let res="";
         for(let i=0;i<data.length;i++){
             let single=data[i];
 
             let userId=single.userId;
-            console.log("userId=",userId);
             let todoId=single._id;
-            console.log("todoId=",todoId);
 
-            console.log("id=",todoId);
-            console.log("single=",single);
+            let titleArray=single.title.split(" ");
+            console.log(titleArray);
+            let descriptionArray=single.description.split(" ")
+ 
             var html=`  <div class="singleTodo">
                             <div class="info">
                                 <div class="title">${single.title}</div>
@@ -142,7 +218,7 @@
                                 <div class="deadline">${single.deadline}</div>
                             </div>
                             <div class="btns">
-                                <button>Edit</button>
+                                <button onClick=editInputBox(${JSON.stringify(userId)},${JSON.stringify(todoId)},${JSON.stringify(titleArray)},${JSON.stringify(descriptionArray)},${JSON.stringify(single.deadline)})>Edit</button>
                                 <button onClick=deleteIt(${JSON.stringify(userId)},${JSON.stringify(todoId)})>Delete</button>
                             </div>
                         </div>`;

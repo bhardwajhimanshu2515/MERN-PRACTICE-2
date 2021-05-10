@@ -51,7 +51,7 @@
             <div id="links">
                 <a href="createTodo.html">Create Todo</a>
                 <a href="getTodo.html">Get Todo</a>
-                <button>Logout</button>
+                <button id="logoutBTN">Logout</button>
             </div>
         </div>
         <div id="forms">
@@ -64,11 +64,21 @@
         </div>
     </body>
     <script>
+        if(!localStorage.getItem("userInfo")){
+        window.location.href="login.html";
+    }
         var title=document.getElementById("title");
         var description=document.getElementById("description");
         var deadline=document.getElementById("deadline");
         var createTodoBtn=document.getElementById("createTodoBtn");
+        var logoutBTN=document.getElementById("logoutBTN");
 
+        //logoutBTN
+        logoutBTN.addEventListener("click",function(e){
+            e.preventDefault();
+            localStorage.removeItem('userInfo');
+            window.location.href="login.html";
+        })
         //add event
         createTodoBtn.addEventListener("click",function(e){
             e.preventDefault();
@@ -103,6 +113,7 @@
             })
             .then(data=>{
                 console.log(data)
+                window.location.href="getTodo.html";
             })
             .catch(err=>{
                 console.log(err);
